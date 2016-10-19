@@ -10,9 +10,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.ruben.rubengerritse_pset6.SignInActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sign_in_title_tv"
+        android:text="The Game Database"
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sign_in_title_tv"
+        android:id="@+id/test"/>
+
     <com.google.android.gms.common.SignInButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sign_in_b">
+        android:id="@+id/sign_in_b"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true">
     </com.google.android.gms.common.SignInButton>
 </RelativeLayout>

@@ -35,6 +35,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        findViewById(R.id.sign_in_b).setOnClickListener(this);
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -68,6 +70,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -89,6 +96,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
             } else {
                 // Google Sign In failed, update UI appropriately
                 // ...
@@ -119,11 +128,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 });
     }
 
-
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
+        System.out.print(id);
         switch (id) {
             case R.id.sign_in_b:
                 signIn();
