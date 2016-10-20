@@ -4,7 +4,7 @@
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="apply">Apply</string>
-    
+
     <string-array name="game_statuses">
         <item>No Status</item>
         <item>Plan to Play</item>

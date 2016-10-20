@@ -22,7 +22,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.concurrent.ExecutionException;
 
-public class SearchActivity extends MenuActivity {
+public class SearchActivity extends BaseActivity {
 
     private static final String PATH = "http://www.giantbomb.com/api/search";
     private static final String KEY = "5496ad3bff8caf2cbadfe3dbbd0bc63c2d41ff34";
