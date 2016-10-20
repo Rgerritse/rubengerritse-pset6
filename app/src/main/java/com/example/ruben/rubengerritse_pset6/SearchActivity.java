@@ -27,7 +27,7 @@ public class SearchActivity extends MenuActivity {
     private static final String PATH = "http://www.giantbomb.com/api/search";
     private static final String KEY = "5496ad3bff8caf2cbadfe3dbbd0bc63c2d41ff34";
     private static final String FORMAT = "json";
-    private static final String FIELD_LIST = "id,name,image";
+    private static final String FIELD_LIST = "id,name,image,original_release_date";
     private static final String RESOURCES = "game";
 //    api/search/
     @Override

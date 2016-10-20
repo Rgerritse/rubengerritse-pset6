@@ -12,10 +12,4 @@ public class HomeActivity extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
     }
-
-//  For test purposes
-    public void onClick(View view) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-    }
 }

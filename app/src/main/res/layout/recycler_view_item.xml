@@ -8,22 +8,27 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/item_image_iv"
-        android:paddingEnd="8dp"
-        android:paddingRight="8dp" />
+        android:layout_marginRight="8dp"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/item_name_tv"
-        android:layout_gravity="center"
-        android:textSize="16sp"
-        android:maxLines="1"
-        android:ellipsize="end"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/item_id_tv"
-        android:visibility="gone"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_name_tv"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_year_tv"
+            android:textSize="12sp"
+            android:layout_marginRight="8dp"/>
+
+    </LinearLayout>
 </LinearLayout>

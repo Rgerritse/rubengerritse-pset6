@@ -1,12 +1,18 @@
 package com.example.ruben.rubengerritse_pset6;
 
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,7 +22,7 @@ public class GameInfoActivity extends AppCompatActivity {
     private static final String PATH = "http://www.giantbomb.com/api/game";
     private static final String KEY = "5496ad3bff8caf2cbadfe3dbbd0bc63c2d41ff34";
     private static final String FORMAT = "json";
-    private static final String FIELD_LIST = "id,name,image";
+    private static final String FIELD_LIST = "id,name,image,deck";
 
     private JSONObject gameJson;
 
@@ -26,7 +32,6 @@ public class GameInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_info);
 
         int id = getIntent().getExtras().getInt("id");
-
 
         String urlString = PATH;
         urlString += String.format("/%s", String.valueOf(id));
@@ -48,15 +53,35 @@ public class GameInfoActivity extends AppCompatActivity {
         }
 
         updateUI();
+
+        Spinner spinner = (Spinner) findViewById(R.id.game_status_sp);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.game_statuses, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
     }
 
     public void updateUI () {
         TextView gameName = (TextView) findViewById(R.id.game_name_tv);
+        TextView gameDeck = (TextView) findViewById(R.id.game_deck_tv);
+        ImageView gameImage = (ImageView) findViewById(R.id.game_image_iv);
 
         try {
             gameName.setText(gameJson.getString("name"));
-        } catch (JSONException e) {
+
+            String imageString = gameJson.getJSONObject("image")
+                    .getString("medium_url");
+            URL imageUrl = new URL(imageString.replaceAll("\\/", "/"));
+            Bitmap bmp = new ImageDownload().execute(imageUrl).get();
+            gameImage.setImageBitmap(bmp);
+            gameDeck.setText(gameJson.getString("deck"));
+
+        } catch (JSONException | InterruptedException | MalformedURLException |
+                ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    public void applyGameStatus(View view) {
+
     }
 }

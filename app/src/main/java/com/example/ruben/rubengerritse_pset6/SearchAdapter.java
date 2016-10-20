@@ -65,6 +65,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             URL imageUrl = new URL(imageString.replaceAll("\\/", "/"));
             Bitmap bmp = new ImageDownload().execute(imageUrl).get();
             holder.itemImage.setImageBitmap(bmp);
+            if (!resultsArray.getJSONObject(position).isNull("original_release_date")) {
+                String year = resultsArray.getJSONObject(position)
+                        .getString("original_release_date").substring(0,4);
+                holder.itemYear.setText(year);
+            } else {
+                holder.itemYear.setText("N/A");
+            }
         } catch (JSONException | InterruptedException | ExecutionException |
                 MalformedURLException e) {
             e.printStackTrace();
@@ -78,12 +85,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView itemTitle;
+        TextView itemYear;
         ImageView itemImage;
+
 
         public ViewHolder(View itemView){
             super(itemView);
             itemTitle = (TextView) itemView.findViewById(R.id.item_name_tv);
+            itemYear = (TextView) itemView.findViewById(R.id.item_year_tv);
             itemImage = (ImageView) itemView.findViewById(R.id.item_image_iv);
+
         }
     }
 }
