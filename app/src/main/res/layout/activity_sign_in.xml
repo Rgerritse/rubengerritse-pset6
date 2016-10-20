@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/sign_in_title_tv"
-        android:text="The Game Database"
+        android:text="@string/the_game_database"
         android:textSize="30sp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"/>

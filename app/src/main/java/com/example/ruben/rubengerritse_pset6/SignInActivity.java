@@ -1,6 +1,7 @@
 package com.example.ruben.rubengerritse_pset6;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,6 +57,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("user", user.getDisplayName());
+                    editor.commit(); // commit changes
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");

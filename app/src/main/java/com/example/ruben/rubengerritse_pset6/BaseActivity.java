@@ -32,15 +32,19 @@ public class BaseActivity extends AppCompatActivity {
                 intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.lists_mi:
+                intent = new Intent(this, ListsActivity.class);
+                startActivity(intent);
+                return true;
             case R.id.search_mi:
                 intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
                 return true;
-//            case R.id.sign_out_mi:
-//                signOut();
-//                Intent intent = new Intent(this, SignInActivity.class);
-//                startActivity(intent);
-//                return true;
+            case R.id.sign_out_mi:
+                FirebaseAuth.getInstance().signOut();
+                intent = new Intent(this, SignInActivity.class);
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -1,7 +1,6 @@
 package com.example.ruben.rubengerritse_pset6;
 
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +22,6 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class GameInfoActivity extends BaseActivity {
@@ -36,8 +33,8 @@ public class GameInfoActivity extends BaseActivity {
     private static final String FIELD_LIST = "id,name,image,deck";
 
 //    List names
-    private static final String PLAN_LIST = "plan_list";
-    private static final String COMPLETED_LIST = "completed_list";
+    private static final String PLAN_LIST = "Plan to Play";
+    private static final String COMPLETED_LIST = "Completed";
 
 //    Log tag
     private static final String TAG = "GameInfoActivity";
@@ -111,11 +108,11 @@ public class GameInfoActivity extends BaseActivity {
                 removeFromList(PLAN_LIST);
                 removeFromList(COMPLETED_LIST);
                 break;
-            case "Plan to Play":
+            case PLAN_LIST:
                 addToList(PLAN_LIST);
                 removeFromList(COMPLETED_LIST);
                 break;
-            case "Completed":
+            case COMPLETED_LIST:
                 addToList(COMPLETED_LIST);
                 removeFromList(PLAN_LIST);
                 break;
@@ -133,7 +130,6 @@ public class GameInfoActivity extends BaseActivity {
                             new GenericTypeIndicator<ArrayList<Integer>>() {};
                     list = dataSnapshot.getValue(t);
                     if (!list.contains(gameId)) {
-                        Toast.makeText(GameInfoActivity.this, "wut", Toast.LENGTH_SHORT).show();
                         list.add(gameId);
                     }
                 } else {
@@ -149,8 +145,6 @@ public class GameInfoActivity extends BaseActivity {
             }
         });
     }
-
-
 
     private void removeFromList(final String listName) {
         final DatabaseReference mListRef = mDatabaseUser.child(listName);
