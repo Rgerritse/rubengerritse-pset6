@@ -3,6 +3,7 @@ package com.example.ruben.rubengerritse_pset6;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -48,6 +51,25 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        mGoogleApiClient.connect();
+        mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(@Nullable Bundle bundle) {
+                Intent signOutIntent = getIntent();
+                if (signOutIntent.hasExtra("sign_out")) {
+                    signOut();
+                } else if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    goToHomeActivity();
+                }
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+
+            }
+        });
+
+
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -75,11 +97,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+    }
 
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-        }
+    private void goToHomeActivity() {
+        Intent homeIntent = new Intent(this, HomeActivity.class);
+        startActivity(homeIntent);
     }
 
     @Override
@@ -149,9 +171,21 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    private void signOut() {
+        mAuth.signOut();
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+
+                    }
+                });
+    }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
+
 }

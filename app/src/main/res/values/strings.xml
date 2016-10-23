@@ -18,5 +18,6 @@
         <item>Plan to Play</item>
         <item>Completed</item>
     </string-array>
+    <string name="title_activity_google">GoogleActivity</string>
 
 </resources>
