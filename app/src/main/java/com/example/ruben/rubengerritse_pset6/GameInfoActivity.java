@@ -24,6 +24,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * This file describes the GameInfoActivity, which is an extension of the BaseActivity class.
+ * GameInfoActivity shows the user the information of a single game and allows the user to add or
+ * remove the game from his lists.
+ */
+
 public class GameInfoActivity extends BaseActivity {
 
 //    Url parameters
@@ -42,15 +48,21 @@ public class GameInfoActivity extends BaseActivity {
     private JSONObject gameJson;
     private DatabaseReference mDatabaseUser;
     private int gameId;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_info);
-
         gameId = getIntent().getExtras().getInt("id");
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("users").child(getUid());
+        getJson();
+        updateUI();
+        setSpinnerAdapter();
+    }
 
+//    Gets the json object of the game from the api
+    private void getJson() {
         String urlString = PATH;
         urlString += String.format("/%s", String.valueOf(gameId));
         urlString += String.format("?api_key=%s", KEY);
@@ -69,15 +81,9 @@ public class GameInfoActivity extends BaseActivity {
                 JSONException e) {
             e.printStackTrace();
         }
-
-        updateUI();
-
-        Spinner spinner = (Spinner) findViewById(R.id.game_status_sp);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.game_statuses, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
     }
 
+//    Updates the information of the game on the screen
     private void updateUI () {
         TextView gameName = (TextView) findViewById(R.id.game_name_tv);
         TextView gameDeck = (TextView) findViewById(R.id.game_deck_tv);
@@ -99,8 +105,16 @@ public class GameInfoActivity extends BaseActivity {
         }
     }
 
+//    Sets the adapter for the spinner
+    private void setSpinnerAdapter() {
+        spinner = (Spinner) findViewById(R.id.game_status_sp);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.game_statuses, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+    }
+
+//    Changes the status of the game for the user
     public void applyGameStatus(View view) {
-        Spinner spinner = (Spinner) findViewById(R.id.game_status_sp);
         String status = spinner.getSelectedItem().toString();
 
         switch (status) {
@@ -119,6 +133,7 @@ public class GameInfoActivity extends BaseActivity {
         }
     }
 
+//    Adds an item to a list
     private void addToList(String listName) {
         final DatabaseReference mListRef = mDatabaseUser.child(listName);
         mListRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -146,9 +161,9 @@ public class GameInfoActivity extends BaseActivity {
         });
     }
 
+//    Removes an item from a list
     private void removeFromList(final String listName) {
         final DatabaseReference mListRef = mDatabaseUser.child(listName);
-
         mListRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

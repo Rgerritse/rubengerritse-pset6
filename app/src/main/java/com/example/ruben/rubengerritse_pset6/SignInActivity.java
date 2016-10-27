@@ -26,7 +26,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class SignInActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener{
+/**
+ * This file describes the SignInActivity class, which is an extension of the AppCompatActivity
+ * class. SignInActivity allows the user to sign into Google+ before using the app. When the user is
+ * connected to Google+, the user is sent to the HomeActivity.
+ */
+
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener,
+        GoogleApiClient.OnConnectionFailedListener{
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -68,7 +75,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             }
         });
-
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -125,9 +131,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 firebaseAuthWithGoogle(account);
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
-            } else {
-                // Google Sign In failed, update UI appropriately
-                // ...
             }
         }
     }
@@ -155,31 +158,29 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 });
     }
 
+//    Sign in the user on click of the button
     @Override
     public void onClick(View v) {
         int id = v.getId();
         System.out.print(id);
         switch (id) {
             case R.id.sign_in_b:
-                signIn();
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
                 break;
         }
     }
 
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
+//    Sign out the user
     private void signOut() {
         mAuth.signOut();
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
+            new ResultCallback<Status>() {
+                @Override
+                public void onResult(@NonNull Status status) {
 
-                    }
-                });
+                }
+            });
     }
 
     @Override

@@ -20,7 +20,9 @@ import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by ruben on 18-10-16.
+ * This file describes the SearchAdapter class, which is an extension of the RecyclerView.Adapter
+ * class. SearchAdapter is an adapter which expects a JsonArray as input and creates items for a
+ * recycler view.
  */
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
@@ -28,6 +30,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private View.OnClickListener listener;
     private Context context;
 
+//    Constructor of this class
     public SearchAdapter(JSONArray array) {
         this.resultsArray = array;
         this.listener = new View.OnClickListener() {
@@ -47,6 +50,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         };
     }
 
+//    Sets the layout of an item
     @Override
     public SearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item,
@@ -55,6 +59,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         return new ViewHolder(view);
     }
 
+//    Binds the views given the information on on ViewHolders
     @Override
     public void onBindViewHolder(SearchAdapter.ViewHolder holder, int position) {
         holder.itemView.setOnClickListener(listener);
@@ -78,23 +83,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }
     }
 
+//    Returns the number of items in this adapter
     @Override
     public int getItemCount() {
         return resultsArray.length();
     }
 
+//    Definition of the ViewHolderClass
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView itemTitle;
         TextView itemYear;
         ImageView itemImage;
 
-
+//    Constructor of the ViewHolder
         public ViewHolder(View itemView){
             super(itemView);
             itemTitle = (TextView) itemView.findViewById(R.id.item_name_tv);
             itemYear = (TextView) itemView.findViewById(R.id.item_year_tv);
             itemImage = (ImageView) itemView.findViewById(R.id.item_image_iv);
-
         }
     }
 }

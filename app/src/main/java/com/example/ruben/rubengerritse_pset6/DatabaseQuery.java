@@ -8,27 +8,28 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 /**
- * Created by ruben on 18-10-16.
+ * This file describes the class DatabaseQuery, which is an extension of the AsyncTask class.
+ * DatabaseQuery reads the data given an url and returns as a String.
  */
 
 public class DatabaseQuery extends AsyncTask<URL,Integer,String> {
+
+//    Reads an url in the background and retuns the data in a String.
     @Override
     protected String doInBackground(URL... params) {
         URL url = params[0];
-
-        BufferedReader in;
-        String inputLine;
-        String jsonString = "";
+        String string = "";
 
         try {
-            in = new BufferedReader(new InputStreamReader(url.openStream()));
+            String inputLine;
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
             while ((inputLine = in.readLine()) != null) {
-                jsonString += inputLine;
+                string += inputLine;
             }
             in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return jsonString;
+        return string;
     }
 }

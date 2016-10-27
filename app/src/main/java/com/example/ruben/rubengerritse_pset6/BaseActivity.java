@@ -9,6 +9,12 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * This file describes the class BaseActivity, which is an extention off the AppCompatActivity
+ * class. BaseActivity describes the settings for the option menu throught the app. Other activities
+ * extend this class.
+ */
+
 public class BaseActivity extends AppCompatActivity {
 
     @Override
@@ -17,6 +23,7 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
     }
 
+//    Set the layout of the option menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -24,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+//    Navigates the user to another activity when an option from the option menu is clicked
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
@@ -50,6 +58,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+//    Returns the user id from firebase
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }

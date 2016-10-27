@@ -16,6 +16,11 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * This file describes the class SearchActivity, which is an extension of the BaseActivity. It
+ * allows the user to search games using the giantbomb api
+ */
+
 public class SearchActivity extends BaseActivity {
 
 //    Url parameters
@@ -25,28 +30,34 @@ public class SearchActivity extends BaseActivity {
     private static final String FIELD_LIST = "id,name,image,original_release_date";
     private static final String RESOURCES = "game";
 
+    private RecyclerView recyclerView;
+    private String urlStringBase;
+
+//    Set the layout of this activity and the recyclerview
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        recyclerView = (RecyclerView) findViewById(R.id.search_rv);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        urlStringBase = PATH;
+        urlStringBase += String.format("?api_key=%s", KEY);
+        urlStringBase += String.format("&format=%s", FORMAT);
+        urlStringBase += String.format("&field_list=%s", FIELD_LIST);
+        urlStringBase += String.format("&resources=%s", RESOURCES);
     }
 
+//    Searches the api using the query inputted by the user and updates the recyclerview given the
+//    output of the api
     public void searchQuery(View view) {
         EditText editText = (EditText) findViewById(R.id.search_et);
         String query = editText.getText().toString().trim();
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.search_rv);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-
         try {
-            String urlString = PATH;
-            urlString += String.format("?query=%s", URLEncoder.encode(query, "UTF-8"));
-            urlString += String.format("&api_key=%s", KEY);
-            urlString += String.format("&format=%s", FORMAT);
-            urlString += String.format("&field_list=%s", FIELD_LIST);
-            urlString += String.format("&resources=%s", RESOURCES);
+            String urlString = urlStringBase + String.format("?query=%s",
+                    URLEncoder.encode(query, "UTF-8"));
             URL url = new URL(urlString);
 
             String jsonString = new DatabaseQuery().execute(url).get();

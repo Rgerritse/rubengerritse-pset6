@@ -26,6 +26,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * This file describes the class ListsActivity, which is an extension of the BaseActivity. It
+ * allows to manage his/her lists.
+ */
+
 public class ListsActivity extends BaseActivity {
 
     private static final String PATH = "http://www.giantbomb.com/api/games";
@@ -36,26 +41,42 @@ public class ListsActivity extends BaseActivity {
 
     private static final String TAG = "ListsActivity";
     private DatabaseReference mDatabaseUser;
+    private RecyclerView recyclerView;
+    private Spinner spinner;
+    private String urlStringBase;
 
+//    Set the properties of the RecyclerView and the Spinner
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lists);
-
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("users").child(getUid());
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.lists_rv);
+        urlStringBase = PATH;
+        urlStringBase += String.format("?api_key=%s", KEY);
+        urlStringBase += String.format("&format=%s", FORMAT);
+        urlStringBase += String.format("&field_list=%s", FIELD_LIST);
+        urlStringBase += String.format("&resources=%s", RESOURCES);
+
+        recyclerView = (RecyclerView) findViewById(R.id.lists_rv);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        Spinner spinner = (Spinner) findViewById(R.id.lists_sp);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.lists, android.R.layout.simple_spinner_item);
+        spinner = (Spinner) findViewById(R.id.lists_sp);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.lists, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
+        setSpinnerItemSelectedListener();
+    }
+
+//    Set the ItemSelectedListener for the Spinner
+    private void setSpinnerItemSelectedListener() {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, final long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position,
+                                       final long id) {
                 String listName = ((TextView) view).getText().toString();
                 DatabaseReference mListRef = mDatabaseUser.child(listName);
                 mListRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -67,15 +88,10 @@ public class ListsActivity extends BaseActivity {
                                     };
                             ArrayList<Integer> list = dataSnapshot.getValue(t);
 
-                            String urlString = PATH;
-                            urlString += "?filter=id:";
+                            String urlString = urlStringBase + "&filter=id:";
                             for (Integer integer : list) {
                                 urlString += integer.toString() + "|";
                             }
-                            urlString += String.format("&api_key=%s", KEY);
-                            urlString += String.format("&format=%s", FORMAT);
-                            urlString += String.format("&field_list=%s", FIELD_LIST);
-                            urlString += String.format("&resources=%s", RESOURCES);
 
                             try {
                                 URL url = new URL(urlString);
@@ -107,6 +123,5 @@ public class ListsActivity extends BaseActivity {
 
             }
         });
-
     }
 }
