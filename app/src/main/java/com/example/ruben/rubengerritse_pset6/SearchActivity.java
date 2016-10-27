@@ -42,6 +42,7 @@ public class SearchActivity extends BaseActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
+
         urlStringBase = PATH;
         urlStringBase += String.format("?api_key=%s", KEY);
         urlStringBase += String.format("&format=%s", FORMAT);
@@ -56,7 +57,7 @@ public class SearchActivity extends BaseActivity {
         String query = editText.getText().toString().trim();
 
         try {
-            String urlString = urlStringBase + String.format("?query=%s",
+            String urlString = urlStringBase + String.format("&query=%s",
                     URLEncoder.encode(query, "UTF-8"));
             URL url = new URL(urlString);
 
